@@ -1,0 +1,4711 @@
+#:kivy 2.0.0
+
+<LongListTitleLabel@Label>:
+    font_size: "35sp"
+    text_size: self.width, None
+    size_hint_y: None
+    size: self.texture_size
+
+    halign: "center"
+    color: 1, 1, 0, 1
+    canvas.before:
+        Color:
+            rgba: 1, 1, 0, 1
+        Line:
+            width: 1
+            points: self.pos[0], self.pos[1] + self.height, self.pos[0] + self.width, self.pos[1] + self.height
+
+<LongListQuestionLabel@Label>:
+    font_size: "25sp"
+    halign: "center"
+    text_size: self.width, None
+    size_hint_y: None
+    size: self.texture_size
+
+<LongListAnswerTextInput@TextInput>:
+    font_size: "25sp"
+    halign: "center"
+    size_hint_y: None
+    hint_text: ". . . . ."
+    foreground_color: 1, .8, 0, 1
+    background_color: 0, 0, 0, 0
+    cursor_color: 1, .8, 0, 1
+    hint_text_color: 1, .8, 0, .5
+    multiline: False
+
+<SettingsInfoLabel@LongListQuestionLabel>:
+
+<SettingsDataTextInput@TextInput>:
+    font_size: "25sp"
+    halign: "center"
+    size_hint_y: None
+    hint_text: ". . . . ."
+    foreground_color: 0, .9, 1, 1
+    background_color: 0, 0, 0, 0
+    cursor_color: 0, .9, 1, 1
+    hint_text_color: 0, .9, 1, .5
+    multiline: False
+
+<SettingsTitleLabel@Label>:
+    font_size: "35sp"
+    text_size: self.width, None
+    size_hint_y: None
+    size: self.texture_size
+
+    halign: "center"
+    color: .3, 1, 1, 1
+    canvas.before:
+        Color:
+            rgba: .3, 1, 1, 1
+        Line:
+            width: 1
+            points: self.pos[0], self.pos[1] + self.height, self.pos[0] + self.width, self.pos[1] + self.height
+
+
+
+AppScreenManager:
+    LoginScreen:
+
+    RegistrationTimeScreen:
+    RegistrationMoneyScreen:
+    RegistrationConfirmScreen:
+
+    CurrentTimeAndMoneyScreen:
+    CurrentMoneyScreen:
+    CurrentTimeScreen:
+    SettingsScreen:
+
+    PersonalDataSettingsScreen:
+    TimeDataSettingsScreen:
+    MoneyDataSettingsScreen:
+    ChangePasswordScreen:
+
+
+
+<LoginScreen>:
+    name: "LoginScreen"
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: "80sp", 0
+
+        Widget:
+            size_hint_y: .3
+
+        Label:
+            text: "ВХОД"
+            font_size: "75sp"
+            color: 0, 0, 0, 1
+
+        Widget:
+            size_hint_y: .3
+
+        BoxLayout:
+            orientation: "vertical"
+            spacing: "10sp"
+            size_hint_y: .85
+
+            TextInput:
+                id: login
+                size_hint_y:.2
+                hint_text: "Логин"
+                font_size: "25sp"
+                foreground_color: 1, 1, 1, 1
+                background_color: 0, 0, 0, 0
+                cursor_color: 1, 1, 1, 1
+                multiline: False
+
+            TextInput:
+                id: password
+                size_hint_y:.2
+                hint_text: "Пароль"
+                font_size: "25sp"
+                foreground_color: 1, 1, 1, 1
+                background_color: 0, 0, 0, 0
+                cursor_color: 1, 1, 1, 1
+                multiline: False
+                password: True
+                allow_copy: False
+
+            Button:
+                size_hint_y:.25
+                text: "ВОЙТИ"
+                font_size: "20sp"
+                bold: True
+                color: 0, 0, 0, 1
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (0, .9, 1, 1) if self.state == 'normal' else (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [25]
+                on_release:
+                    root.manager.transition.direction = "up"
+                    if root.log_in(): app.root.current = "CurrentTimeAndMoneyScreen"; root.clear_canvas(); login.text = ""; password.text = ""
+
+            Button:
+                size_hint_y:.1
+                text: "создать профиль?"
+                color: (0, 0, 1, 1) if self.state == 'normal' else (.12, .12, 1, 1)
+                background_color: 0, 0, 0, 0
+                on_release:
+                    root.clear_canvas()
+                    root.manager.transition.direction = "left"
+                    app.root.current = "RegistrationTimeScreen"
+        
+        Widget:
+
+
+
+<RegistrationTimeScreen>:
+    name: "RegistrationTimeScreen"
+
+    BoxLayout:
+        orientation: "vertical"
+        spacing: "5sp"
+
+        BoxLayout:
+            size_hint_y: .06
+
+            Button:
+                text: "Назад"
+                size_hint_x: self.height * 3 / self.parent.width
+                width: self.height * 2
+                color: 0, 0, 0, 1
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (1, .8, 0, 1) if self.state == 'normal' else (1, 1, 0, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [15]
+                on_release:
+                    root.manager.transition.direction = "right"
+                    app.root.current = "LoginScreen"
+
+            Label:
+                id: state
+                text: "Время"
+                color: 1, 1, 0, 1
+                font_size: "30sp"
+                halign: "center"
+                text_size: self.width, None
+                size: self.texture_size
+
+        ScrollView:
+            GridLayout:
+                cols: 1
+                padding: "30sp", 0
+                size_hint_y: None
+                height: self.minimum_height
+                row_default_height: "95sp"
+                row_force_default: True
+
+                LongListTitleLabel: ###########################################
+                    text: "Общие данные"
+                
+                LongListQuestionLabel:
+                    text: "Ваше имя:"
+                LongListAnswerTextInput:
+                    id: user_name
+                    hint_text: ". . . . ."
+
+                LongListQuestionLabel:
+                    text: "Дата рождения:"
+                LongListAnswerTextInput:
+                    id: date_of_birth
+                    hint_text: "dd.mm.yyyy"
+
+                
+                LongListTitleLabel: ###########################################
+                    text: "Род деятельности"
+
+                LongListQuestionLabel:
+                    text: "Выберите то, чем Вы занимаетесь:"
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Ничем"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: no_working
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.study_at_school.active = False if self.active == True else root.ids.study_at_school.active
+                            root.ids.study_at_university.active = False if self.active == True else root.ids.study_at_university.active
+                            root.ids.working.active = False if self.active == True else root.ids.working.active
+                            root.ids.personal_business.active = False if self.active == True else root.ids.personal_business.active
+                            root.ids.other_work.active = False if self.active == True else root.ids.other_work.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Учусь в школе"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: study_at_school
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_working.active = False if self.active == True else root.ids.no_working.active
+                            root.ids.study_at_university.active = False if self.active == True else root.ids.study_at_university.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Учусь в ВУЗе/колледже"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: study_at_university
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_working.active = False if self.active == True else root.ids.no_working.active
+                            root.ids.study_at_school.active = False if self.active == True else root.ids.study_at_school.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Работаю"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: working
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_working.active = False if self.active == True else root.ids.no_working.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Свой бизнес"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: personal_business
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_working.active = False if self.active == True else root.ids.no_working.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Другое"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: other_work
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_working.active = False if self.active == True else root.ids.no_working.active
+
+                LongListQuestionLabel:
+                    text: "Сколько дней в неделю Вы на это тратите?"
+                LongListAnswerTextInput:
+                    id: days_a_week_at_work
+                    input_filter: "int"
+                    hint_text: "X"
+
+                LongListQuestionLabel:
+                    text: "Сколько в среднем часов в день эта деятельность занимает?"
+                LongListAnswerTextInput:
+                    id: hours_a_day_work
+                    input_filter: "float"
+                    hint_text: "X"
+
+                LongListQuestionLabel:
+                    text: "Сколько в среднем минут в день занимает путь на эту деятельность?"
+                LongListAnswerTextInput:
+                    id: minutes_travel_time_to_work
+                    input_filter: "float"
+                    hint_text: "XX"
+
+                LongListQuestionLabel:
+                    text: "Сколько в среднем минут в день занимает путь с этой деятельности?"
+                LongListAnswerTextInput:
+                    id: minutes_travel_time_from_work
+                    input_filter: "float"
+                    hint_text: "XX"
+
+                LongListQuestionLabel:
+                    text: "Занимаетесь ли Вы самообразованием и если да, сколько минут в день на него тратите?"
+                LongListAnswerTextInput:
+                    id: minutes_for_self_education_per_day
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XX"
+
+
+                LongListTitleLabel: ###########################################
+                    text: "Хобби и сон"
+
+                LongListQuestionLabel:
+                    text: "Пожалуйста, укажите Ваше(и) хобби:"
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Хобби отсутствует"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: no_hobbies
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.sport_hobby.active = False if self.active == True else root.ids.sport_hobby.active
+                            root.ids.tourism_hobby.active = False if self.active == True else root.ids.tourism_hobby.active
+                            root.ids.dance_hobby.active = False if self.active == True else root.ids.dance_hobby.active
+                            root.ids.hunting_hobby.active = False if self.active == True else root.ids.hunting_hobby.active
+                            root.ids.art_hobby.active = False if self.active == True else root.ids.art_hobby.active
+                            root.ids.vocals_hobby.active = False if self.active == True else root.ids.vocals_hobby.active
+                            root.ids.collecting_hobby.active = False if self.active == True else root.ids.collecting_hobby.active
+                            root.ids.programming_hobby.active = False if self.active == True else root.ids.programming_hobby.active
+                            root.ids.construction_hobby.active = False if self.active == True else root.ids.construction_hobby.active
+                            root.ids.walk_hobby.active = False if self.active == True else root.ids.walk_hobby.active
+                            root.ids.shopping_hobby.active = False if self.active == True else root.ids.shopping_hobby.active
+                            root.ids.film_hobby.active = False if self.active == True else root.ids.film_hobby.active
+                            root.ids.video_games_hobby.active = False if self.active == True else root.ids.video_games_hobby.active
+                            root.ids.meditation_hobby.active = False if self.active == True else root.ids.meditation_hobby.active
+                            root.ids.other_hobby.active = False if self.active == True else root.ids.other_hobby.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Спорт"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: sport_hobby
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Туризм"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: tourism_hobby
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Танцы"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: dance_hobby
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Охота / Рыбалка"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: hunting_hobby
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Искусство"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: art_hobby
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Вокал"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: vocals_hobby
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Коллекционирование"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: collecting_hobby
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Программирование"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: programming_hobby
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Конструирование"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: construction_hobby
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Прогулки"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: walk_hobby
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Шоппинг"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: shopping_hobby
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Фильмы / Сериалы"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: film_hobby
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Видеоигры"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: video_games_hobby
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Медитация / Йога"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: meditation_hobby
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Другое"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: other_hobby
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                
+                LongListQuestionLabel:
+                    text: "Сколько часов в неделю занимает(ют) Ваше(и) хобби?"
+                LongListAnswerTextInput:
+                    id: hours_a_week_for_hobbies
+                    input_filter: "float"
+                    hint_text: "X"
+
+                LongListQuestionLabel:
+                    text: "Сколько часов в день Вы обычно спите?"
+                LongListAnswerTextInput:
+                    id: hours_of_sleep
+                    input_filter: "float"
+                    hint_text: "X"
+
+
+                LongListTitleLabel: ###########################################
+                    text: "Пожиратели времени"
+
+                LongListQuestionLabel:
+                    text: "Пожалуйста, выберите Ваших пожирателей времени:"
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Отсутствуют"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: no_time_wasters
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.TV_addiction_time_waster.active = False if self.active == True else root.ids.TV_addiction_time_waster.active
+                            root.ids.internet_addiction_time_waster.active = False if self.active == True else root.ids.internet_addiction_time_waster.active
+                            root.ids.chatter_time_waster.active = False if self.active == True else root.ids.chatter_time_waster.active
+                            root.ids.smoking_time_waster.active = False if self.active == True else root.ids.smoking_time_waster.active
+                            root.ids.other_time_waster.active = False if self.active == True else root.ids.other_time_waster.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "ТВ-зависимость"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: TV_addiction_time_waster
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_time_wasters.active = False if self.active == True else root.ids.no_time_wasters.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Интернет-зависимость"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: internet_addiction_time_waster
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_time_wasters.active = False if self.active == True else root.ids.no_time_wasters.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Болтовня и сплетни"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: chatter_time_waster
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_time_wasters.active = False if self.active == True else root.ids.no_time_wasters.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Курение / вейпинг / кальян"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: smoking_time_waster
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_time_wasters.active = False if self.active == True else root.ids.no_time_wasters.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Другое"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: other_time_waster
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+                        on_active:
+                            root.ids.no_time_wasters.active = False if self.active == True else root.ids.no_time_wasters.active
+
+                LongListQuestionLabel:
+                    text: "Сколько часов в будний день уходит на Ваших пожирателей времени?"
+                LongListAnswerTextInput:
+                    id: hours_on_a_weekday_for_time_wasters
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "X"
+
+                LongListQuestionLabel:
+                    text: "Сколько часов в выходной день уходит на Ваших пожирателей времени?"
+                LongListAnswerTextInput:
+                    id: hours_on_a_day_off_for_time_wasters
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "X"
+
+
+                LongListTitleLabel: ###########################################
+                    text: "Быт и семья"
+
+                LongListQuestionLabel:
+                    text: "Сколько раз в неделю Вы посещаете продуктовые и бытовые магазины?"
+                LongListAnswerTextInput:
+                    id: visit_store_once_a_week
+                    input_filter: "int"
+                    hint_text: "X"
+
+                LongListQuestionLabel:
+                    text: "Сколько в среднем минут Вам требуется на путь в магазин?"
+                LongListAnswerTextInput:
+                    id: minutes_on_the_way_to_the_store
+                    input_filter: "float"
+                    hint_text: "X"
+
+                LongListQuestionLabel:
+                    text: "Сколько минут в среднем Вы проводите в магазине?"
+                LongListAnswerTextInput:
+                    id: minutes_to_visit_shop
+                    input_filter: "float"
+                    hint_text: "X"
+
+                LongListQuestionLabel:
+                    text: "Сколько часов в неделю Вы тратите на семью / отношения?"
+                LongListAnswerTextInput:
+                    id: hours_per_week_per_family
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "X"
+
+                LongListQuestionLabel:
+                    text: "Сколько часов в неделю Вы тратите на домашних животных?"
+                LongListAnswerTextInput:
+                    id: hours_per_week_for_pets
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "X"
+
+                LongListQuestionLabel:
+                    text: "Сколько часов в неделю Вы тратите на уборку?"
+                LongListAnswerTextInput:
+                    id: hours_per_week_for_cleaning
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "X"
+
+                LongListQuestionLabel:
+                    text: "Среднее количесво минут на принятие душа/ванны в день:"
+                LongListAnswerTextInput:
+                    id: minutes_per_day_per_shower
+                    input_filter: "float"
+                    hint_text: "X"
+
+                LongListQuestionLabel:
+                    text: "Среднее количесво минут на рутины после пробуждения(заправить постель, умыться и т.д.):"
+                LongListAnswerTextInput:
+                    id: minutes_after_sleep
+                    input_filter: "float"
+                    hint_text: "X"
+
+                LongListQuestionLabel:
+                    text: "Среднее количесво минут на рутины перед сном:"
+                LongListAnswerTextInput:
+                    id: minutes_before_sleep
+                    input_filter: "float"
+                    hint_text: "X"
+
+
+                LongListTitleLabel: ###########################################
+                    text: "Готовка и приём пищи"
+
+                LongListQuestionLabel:
+                    text: "Сколько часов в неделю Вы обычно тратите на готовку?"
+                LongListAnswerTextInput:
+                    id: hours_a_day_for_cooking
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "X"
+
+                LongListQuestionLabel:
+                    text: "Сколько минут обычно занимает Ваш завтрак?"
+                LongListAnswerTextInput:
+                    id: minutes_for_breakfast
+                    input_filter: "float"
+                    hint_text: "X"
+
+                LongListQuestionLabel:
+                    text: "Сколько минут обычно занимает Ваш обед?"
+                LongListAnswerTextInput:
+                    id: minutes_for_lunch
+                    input_filter: "float"
+                    hint_text: "X"
+
+                LongListQuestionLabel:
+                    text: "Сколько минут обычно занимает Ваш ужин?"
+                LongListAnswerTextInput:
+                    id: minutes_for_dinner
+                    input_filter: "float"
+                    hint_text: "X"
+
+                LongListTitleLabel: ###########################################
+                    text: "Уход за собой"
+
+                LongListQuestionLabel:
+                    text: "Количесво часов на посещение парикмахера/барбера/стилиста в месяц:"
+                LongListAnswerTextInput:
+                    id: hours_per_month_per_hairdresser
+                    input_filter: "float"
+                    hint_text: "X"
+
+                LongListQuestionLabel:
+                    text: "Среднее количесво часов на посещение иных работников сферы красоты и ухода в месяц:"
+                LongListAnswerTextInput:
+                    id: hours_per_month_for_beauty_workers
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "X"
+
+
+                LongListTitleLabel: ###########################################
+                    text: "Другое"
+
+                LongListQuestionLabel:
+                    text: "Количество затрачиваемых часов на иные виды деятельности в неделю:"
+                LongListAnswerTextInput:
+                    id: hours_per_week_for_other_activities
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "X"
+                
+                AnchorLayout:
+                    Button:
+                        text: "Продолжить"
+                        font_size: "25sp"
+                        size_hint: .8, .8
+                        color: 0, 0, 0, 1
+                        background_color: 0, 0, 0, 0
+                        canvas.before:
+                            Color:
+                                rgba: (1, .8, 0, 1) if self.state == 'normal' else (1, 1, 0, 1)
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [20]
+                        on_release:
+                            root.manager.transition.direction = "left"
+                            if root.write_data(): app.root.current = "RegistrationMoneyScreen"
+                            else: state.text = "Ошибка"; state.color = (1, 0, 0, 1)
+
+
+
+<RegistrationMoneyScreen>:
+    name: "RegistrationMoneyScreen"
+
+    BoxLayout:
+        orientation: "vertical"
+        spacing: "5sp"
+
+        BoxLayout:
+            size_hint_y: .06
+
+            Button:
+                text: "Назад"
+                size_hint_x: self.height * 3 / self.parent.width
+                width: self.height * 2
+                color: 0, 0, 0, 1
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (1, .8, 0, 1) if self.state == 'normal' else (1, 1, 0, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [15]
+                on_release:
+                    root.manager.transition.direction = "right"
+                    app.root.current = "RegistrationTimeScreen"
+
+            Label:
+                id: state
+                text: "Финансы"
+                color: 1, 1, 0, 1
+                font_size: "30sp"
+                halign: "center"
+                text_size: self.width, None
+                size: self.texture_size
+
+        ScrollView:
+            GridLayout:
+                id: RegistrationMoneyScreen_GridLayout
+                cols: 1
+                padding: "30sp", 0
+                size_hint_y: None
+                height: self.minimum_height
+                row_default_height: "95sp"
+
+                LongListTitleLabel: ###########################################
+                    text: "Валюта"
+
+                LongListQuestionLabel:
+                    text: "Укажите предпочитаемую валюту:"
+
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "₽"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "right"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: currency_ruble
+                        group: "currency" 
+                        active: True
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+
+                    Label:
+                        font_name: "data/fonts/Lato.ttf"
+                        text: "₴"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "right"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: currency_hryvnia
+                        group: "currency" 
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+
+                    Label:
+                        font_name: "data/fonts/Lato.ttf"
+                        text: "₸"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "right"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: currency_tenge
+                        group: "currency" 
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+
+                    Label:
+                        font_name: "data/fonts/Lato.ttf"
+                        text: "₮"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "right"
+                        valign: "center"
+
+                    CheckBox:
+                        id: currency_tugrik
+                        group: "currency" 
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        font_name: "data/fonts/Lato.ttf"
+                        text: "Ұ"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "right"
+                        valign: "center"
+
+                    CheckBox:
+                        id: currency_yuan
+                        group: "currency" 
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+
+                    Label:
+                        font_name: "data/fonts/Lato.ttf"
+                        text: "$"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "right"
+                        valign: "center"
+
+                    CheckBox:
+                        id: currency_dollar
+                        group: "currency" 
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+
+                    Label:
+                        font_name: "data/fonts/Lato.ttf"
+                        text: "€"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "right"
+                        valign: "center"
+
+                    CheckBox:
+                        id: currency_euro
+                        group: "currency" 
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+
+                    Label:
+                        font_name: "data/fonts/Lato.ttf"
+                        text: "£"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "right"
+                        valign: "center"
+
+                    CheckBox:
+                        id: currency_pound_sterling
+                        group: "currency" 
+                        size_hint_y: None
+                        color: 1, .8, 0, 1
+
+
+                LongListTitleLabel: ###########################################
+                    text: "Доходы"
+
+                LongListQuestionLabel:
+                    id: scholarship_per_month_Label
+                    text: "Стипендия или иные выплаты с учебного заведения в месяц:"
+                LongListAnswerTextInput:
+                    id: scholarship_per_month
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Ваша зарплата в месяц:"
+                LongListAnswerTextInput:
+                    id: salary_per_month
+                    input_filter: "float"
+                    hint_text: "XXXXX"
+
+                LongListQuestionLabel:
+                    text: "Примерное количество премий в год:"
+                LongListAnswerTextInput:
+                    id: premiums_per_year
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XX"
+
+                LongListQuestionLabel:
+                    text: "Средний размер премии:"
+                LongListAnswerTextInput:
+                    id: premium_amount
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Количество Ваших бизнесов:"
+                LongListAnswerTextInput:
+                    id: number_of_businesses
+                    input_filter: "int"
+                    text: "1"
+                    hint_text: "X"
+
+                LongListQuestionLabel:
+                    text: "Средняя чистая прибыль с Вашего(их) бизнеса(ов) в месяц:"
+                LongListAnswerTextInput:
+                    id: net_income_from_business_per_month
+                    input_filter: "float"
+                    hint_text: "XXXXX"
+
+                LongListQuestionLabel:
+                    text: "Сумма иных финансовых поступлений в месяц:"
+                LongListAnswerTextInput:
+                    id: other_financial_receipts_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+
+                LongListTitleLabel: ###########################################
+                    text: "Расходы"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на спорт и снаряжение средства в месяц:"
+                LongListAnswerTextInput:
+                    id: sports_funds_per_month
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на туризм и снаряжение средства в месяц:"
+                LongListAnswerTextInput:
+                    id: tourism_funds_per_month
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на танцы и снаряжение средства в месяц:"
+                LongListAnswerTextInput:
+                    id: dance_funds_per_month
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на охоту/рыбалку и снаряжение средства в месяц:"
+                LongListAnswerTextInput:
+                    id: hunting_funds_per_month
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на искусство, инструменты и материал средства в месяц:"
+                LongListAnswerTextInput:
+                    id: art_funds_per_month
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на вокал средства в месяц:"
+                LongListAnswerTextInput:
+                    id: vocals_funds_per_month
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на коллецкционирование средства в месяц:"
+                LongListAnswerTextInput:
+                    id: collecting_funds_per_month
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на программирование средства в месяц:"
+                LongListAnswerTextInput:
+                    id: programming_funds_per_month
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на конструирование средства в месяц:"
+                LongListAnswerTextInput:
+                    id: construction_funds_per_month
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на прогулки средства в месяц(включая снаряжение и одежду):"
+                LongListAnswerTextInput:
+                    id: walk_funds_per_month
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на шоппинг средства в месяц:"
+                LongListAnswerTextInput:
+                    id: shopping_funds_per_month
+                    input_filter: "float"
+                    hint_text: "XXXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на фильмы/сериалы(подписки и/или другое) средства в месяц:"
+                LongListAnswerTextInput:
+                    id: film_funds_per_month
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на видеоигры средства в месяц:"
+                LongListAnswerTextInput:
+                    id: video_games_funds_per_month
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на медитацию/йогу средства в месяц:"
+                LongListAnswerTextInput:
+                    id: meditation_funds_per_month
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на иные виды хобби средства в месяц:"
+                LongListAnswerTextInput:
+                    id: funds_for_other_types_of_hobbies_per_month
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на самообразование средства в месяц:"
+                LongListAnswerTextInput:
+                    id: self_education_funds_per_month
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на ТВ средства в месяц:"
+                LongListAnswerTextInput:
+                    id: TV_funds_per_month
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на интернет-ресурсы средства в месяц:"
+                LongListAnswerTextInput:
+                    id: internet_resources_funds_per_month
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на курение/вейпинг средства в месяц:"
+                LongListAnswerTextInput:
+                    id: smoking_funds_per_month
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на иные пожиратели времени средства в месяц:"
+                LongListAnswerTextInput:
+                    id: funds_for_other_types_of_time_wasters_per_month
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на покупки в продуктовом мазагине средства в неделю:"
+                LongListAnswerTextInput:
+                    id: grocery_shopping_allowance_per_week
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на покупки в бытовом мазагине средства в неделю:"
+                LongListAnswerTextInput:
+                    id: funds_for_shopping_at_a_household_store_per_week
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на парикмахера / барбера / стилиста средства в месяц:"
+                LongListAnswerTextInput:
+                    id: funds_for_a_hairdresser_per_month
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на иных работников сферы красоты и ухода средства в месяц:"
+                LongListAnswerTextInput:
+                    id: funds_for_other_beauty_workers_per_month
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на интернет средства в месяц:"
+                LongListAnswerTextInput:
+                    id: internet_funds_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                LongListQuestionLabel:
+                    text: "Затрачиваемые на иные расходы средства в месяц:"
+                LongListAnswerTextInput:
+                    id: other_funds_per_month
+                    input_filter: "float"
+                    text: "0"
+                    hint_text: "XXXX"
+
+                AnchorLayout:
+                    Button:
+                        text: "Продолжить"
+                        font_size: "25sp"
+                        size_hint: .8, .8
+                        color: 0, 0, 0, 1
+                        background_color: 0, 0, 0, 0
+                        canvas.before:
+                            Color:
+                                rgba: (1, .8, 0, 1) if self.state == 'normal' else (1, 1, 0, 1)
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [20]
+                        on_release:
+                            root.manager.transition.direction = "left"
+                            if root.write_data(): app.root.current = "RegistrationConfirmScreen"
+                            else: state.text = "Ошибка"; state.color = (1, 0, 0, 1)
+
+
+
+<RegistrationConfirmScreen>:
+    name: "RegistrationConfirmScreen"
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: "80sp", 0
+
+        Widget:
+            size_hint_y: .15
+
+        Label:
+            text: "РЕГИСТРАЦИЯ"
+            halign: "center"
+            font_size: "50sp"
+            color: 0, 0, 0, 1
+
+        Widget:
+            size_hint_y: .25
+
+        BoxLayout:
+            orientation: "vertical"
+            spacing: "10sp"
+            size_hint_y: .85
+
+            TextInput:
+                id: new_login
+                size_hint_y:.2
+                hint_text: "Новый логин"
+                font_size: "25sp"
+                foreground_color: 1, 1, 1, 1
+                background_color: 0, 0, 0, 0
+                cursor_color: 1, 1, 1, 1
+                multiline: False
+
+            TextInput:
+                id: new_password
+                size_hint_y:.2
+                hint_text: "Новый пароль"
+                font_size: "25sp"
+                foreground_color: 1, 1, 1, 1
+                background_color: 0, 0, 0, 0
+                cursor_color: 1, 1, 1, 1
+                multiline: False
+                password: True
+                allow_copy: False
+
+            TextInput:
+                id: confirm_new_password
+                size_hint_y:.2
+                hint_text: "Подтвердите пароль"
+                font_size: "25sp"
+                foreground_color: 1, 1, 1, 1
+                background_color: 0, 0, 0, 0
+                cursor_color: 1, 1, 1, 1
+                multiline: False
+                password: True
+                allow_copy: False
+
+            Button:
+                size_hint_y:.25
+                text: "ЗАВЕРШИТЬ"
+                font_size: "20sp"
+                bold: True
+                color: 0, 0, 0, 1
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (1, .8, 0, 1) if self.state == 'normal' else (1, 1, 0, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [25]
+                on_release:
+                    root.manager.transition.direction = "right"
+                    if root.complete_registration(): app.root.current = "LoginScreen"
+
+
+        Widget:
+            size_hint_y: .8
+
+
+
+<CurrentTimeAndMoneyScreen>:
+    name: "CurrentTimeAndMoneyScreen"
+
+    canvas.before:
+        Color:
+            rgba: (0, .18, .2, 1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
+    BoxLayout:
+        orientation: "vertical"
+        spacing: "5sp"
+
+        Label:
+            text: "СВОДКА"
+            font_size: "35sp"
+            bold: True
+            color: 0, 0, 0, 1
+            size_hint_y: .08
+
+            canvas.before:
+                Color:
+                    rgba: 0, .9, 1, 1
+
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+        BoxLayout:
+            orientation: "vertical"
+
+            BoxLayout:
+                orientation: "vertical"
+                size_hint_y: .175
+                padding: "10sp", "10sp"
+                spacing: "10sp"
+
+                canvas.before:
+                    Color:
+                        rgba: 0, .18, .2, .3
+
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [15]
+                
+                Label:
+                    id: date
+                    color: 1, 1, 1, 1
+                    font_size: "24sp"
+                    text: "***"
+                    text_size: self.size
+                    halign: "left"
+                    markup: True
+
+                Label:
+                    id: greeting
+                    color: 1, 1, 1, 1
+                    font_size: "28sp"
+                    text: "***"
+                    text_size: self.size
+                    halign: "left"
+
+            BoxLayout:
+                orientation: "vertical"
+                spacing: "30sp"
+                padding: "10sp", "30sp"
+
+                BoxLayout:
+                    orientation: "vertical"
+                    padding: 0, self.size[1] * .25
+
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, .3
+                        RoundedRectangle:
+                            pos: self.pos[0] + 5, self.pos[1] - 5
+                            size: self.size[0], self.size[1]
+                            radius: [25]
+
+                        Color:
+                            rgba: 0, .9, 1, 1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [25]
+
+                    Label:
+                        text: "Прибыль:"
+                        font_size: "35sp"
+                        color: 0, .18, .2, 1
+                        halign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: income
+                        font_size: "40sp"
+                        color: 0, 0, 0, 1
+                        halign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        markup: True
+
+                BoxLayout:
+                    orientation: "vertical"
+                    padding: 0, self.size[1] * .25
+
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, .3
+                        RoundedRectangle:
+                            pos: self.pos[0] + 5, self.pos[1] - 5
+                            size: self.size[0], self.size[1]
+                            radius: [25]
+
+                        Color:
+                            rgba: 0, .9, 1, 1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [25]
+
+                    Label:
+                        text: "Отработанное время:"
+                        font_size: "35sp"
+                        color: 0, .18, .2, 1
+                        halign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: profitable_activity
+                        font_size: "40sp"
+                        color: 0, 0, 0, 1
+                        halign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        markup: True
+        
+        BoxLayout:
+            size_hint_y: .155
+            spacing: "1sp"
+            padding: "1sp", 0
+
+            Button:
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [25]
+
+                    Rectangle:
+                        source: "data/images/time_money_icon.png"
+                        pos: self.pos[0] + self.size[0] * .15, self.pos[1] + self.size[1] * .15
+                        size: self.size[0] * .7, self.size[1] * .7
+
+            Button:
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (0, .9, 1, 1) if self.state == "normal" else (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [25]
+
+                    Rectangle:
+                        source: "data/images/money_icon.png"
+                        pos: self.pos[0] + self.size[0] * .15, self.pos[1] + self.size[1] * .15
+                        size: self.size[0] * .7, self.size[1] * .7
+
+                on_release:
+                    root.manager.transition.direction = "left"
+                    app.root.current = "CurrentMoneyScreen"
+
+
+            Button:
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (0, .9, 1, 1) if self.state == "normal" else (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [25]
+
+                    Rectangle:
+                        source: "data/images/time_icon.png"
+                        pos: self.pos[0] + self.size[0] * .15, self.pos[1] + self.size[1] * .15
+                        size: self.size[0] * .7, self.size[1] * .7
+
+                on_release:
+                    root.manager.transition.direction = "left"
+                    app.root.current = "CurrentTimeScreen"
+
+            Button:
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (0, .9, 1, 1) if self.state == "normal" else (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [25]
+
+                    Rectangle:
+                        source: "data/images/settings_icon.png"
+                        pos: self.pos[0] + self.size[0] * .15, self.pos[1] + self.size[1] * .15
+                        size: self.size[0] * .7, self.size[1] * .7
+
+                on_release:
+                    root.manager.transition.direction = "left"
+                    app.root.current = "SettingsScreen"
+
+<CurrentMoneyScreen>:
+    name: "CurrentMoneyScreen"
+
+    canvas.before:
+        Color:
+            rgba: (0, .18, .2, 1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
+    BoxLayout:
+        orientation: "vertical"
+        spacing: "5sp"
+
+        Label:
+            text: "ФИНАНСЫ"
+            font_size: "35sp"
+            bold: True
+            color: 0, 0, 0, 1
+            size_hint_y: .08
+
+            canvas.before:
+                Color:
+                    rgba: 0, .9, 1, 1
+
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+        ScrollView:
+            GridLayout:
+                cols: 1
+                padding: "10sp", 0
+                spacing: "25sp"
+                size_hint_y: None
+                height: self.minimum_height
+                row_default_height: "50sp"
+
+                Widget:
+
+                Widget:
+                    id: cash_flow_canvas
+
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, .3
+
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+
+                BoxLayout:
+
+                    Label:
+                        text: "Доходы:"
+                        color: 0, 1, 0, 1
+                        font_size: "30sp"
+                        halign: "center"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                    Label:
+                        id: income
+                        font_size: "30sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Расходы:"
+                        color: 1, 0, 0, 1
+                        font_size: "30sp"
+                        halign: "center"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                    Label:
+                        id: expenses
+                        font_size: "30sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Ден. поток:"
+                        color: 1, 1, 0, 1
+                        font_size: "30sp"
+                        halign: "center"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                    Label:
+                        id: cash_flow
+                        font_size: "30sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                Widget:
+
+                BoxLayout:
+                    padding: (self.children[0].size[0] - self.children[0].texture_size[0]), 0
+
+                    Label:
+                        text: "Заработано:"
+                        color: 0, 0, 0, 1
+                        font_size: "30sp"
+                        halign: "center"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                        canvas.before:
+                            Color:
+                                rgba: 0, 0, 0, .3
+
+                            RoundedRectangle:
+                                pos: self.pos[0] + 3, self.pos[1] - 3
+                                size: self.size
+                                radius: [10]
+
+                            Color:
+                                rgba: 0, .9, 1, 1
+
+                            RoundedRectangle:
+                                size: self.size
+                                pos: self.pos
+                                radius: [10]
+
+                BoxLayout:
+
+                    Label:
+                        text: "Стипендия:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: scholarship
+                        color: 0, 1, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Зарплата:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: salary
+                        color: 0, 1, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Премии:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: premiums
+                        color: 0, 1, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Бизнес:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: business
+                        color: 0, 1, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Другое:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: other_financial_receipts
+                        color: 0, 1, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                Widget:
+
+                BoxLayout:
+                    padding: (self.children[0].size[0] - self.children[0].texture_size[0]), 0
+
+                    Label:
+                        text: "Потрачено:"
+                        color: 0, 0, 0, 1
+                        font_size: "30sp"
+                        halign: "center"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                        canvas.before:
+                            Color:
+                                rgba: 0, 0, 0, .3
+
+                            RoundedRectangle:
+                                pos: self.pos[0] + 3, self.pos[1] - 3
+                                size: self.size
+                                radius: [10]
+
+                            Color:
+                                rgba: 0, .9, 1, 1
+
+                            RoundedRectangle:
+                                size: self.size
+                                pos: self.pos
+                                radius: [10]
+
+                BoxLayout:
+
+                    Label:
+                        text: "Cпорт:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: sport
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Туризм:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: tourism
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Танцы:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: dance
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Охота/рыбалка:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: hunting
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Искусство:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: art
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Вокал:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: vocal
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Коллекцион.:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: collecting
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Программ.:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: programming
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Констр.:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: construction
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Прогулки:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: walk
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Шоппинг:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: shopping
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Фильмы/сер.:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: film
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Видеоигры:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: video_games
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Медитация:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: meditation
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Другие хобби:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: other_types_of_hobbies
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                Widget:
+
+                BoxLayout:
+
+                    Label:
+                        text: "Самообразов.:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: self_education
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                Widget:
+
+                BoxLayout:
+
+                    Label:
+                        text: "ТВ:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: TV
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Интернет-рес.:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: internet_resources
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Курение/вейпинг:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: smoking
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Др. пож. врем.:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: other_types_of_time_wasters
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                Widget:
+
+                BoxLayout:
+
+                    Label:
+                        text: "Парикмахер:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: hairdresser
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Сфера красоты:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: other_beauty_workers
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Интернет:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: internet
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Прод. магазины:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: grocery_shopping
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Быт. магазины:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: shopping_at_a_household_store
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+                Widget:
+
+                BoxLayout:
+
+                    Label:
+                        text: "Другое:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: other_funds
+                        color: 1, 0, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        text_size: self.width, None
+                        size_hint_y: None
+                        size: self.texture_size
+
+        BoxLayout:
+            size_hint_y: .155
+            spacing: "1sp"
+            padding: "1sp", 0
+
+            Button:
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (0, .9, 1, 1) if self.state == "normal" else (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [25]
+
+                    Rectangle:
+                        source: "data/images/time_money_icon.png"
+                        pos: self.pos[0] + self.size[0] * .15, self.pos[1] + self.size[1] * .15
+                        size: self.size[0] * .7, self.size[1] * .7
+
+                on_release:
+                    root.manager.transition.direction = "right"
+                    app.root.current = "CurrentTimeAndMoneyScreen"
+
+            Button:
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [25]
+
+                    Rectangle:
+                        source: "data/images/money_icon.png"
+                        pos: self.pos[0] + self.size[0] * .15, self.pos[1] + self.size[1] * .15
+                        size: self.size[0] * .7, self.size[1] * .7
+
+            Button:
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (0, .9, 1, 1) if self.state == "normal" else (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [25]
+
+                    Rectangle:
+                        source: "data/images/time_icon.png"
+                        pos: self.pos[0] + self.size[0] * .15, self.pos[1] + self.size[1] * .15
+                        size: self.size[0] * .7, self.size[1] * .7
+
+                on_release:
+                    root.manager.transition.direction = "left"
+                    app.root.current = "CurrentTimeScreen"
+
+            Button:
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (0, .9, 1, 1) if self.state == "normal" else (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [25]
+
+                    Rectangle:
+                        source: "data/images/settings_icon.png"
+                        pos: self.pos[0] + self.size[0] * .15, self.pos[1] + self.size[1] * .15
+                        size: self.size[0] * .7, self.size[1] * .7
+
+                on_release:
+                    root.manager.transition.direction = "left"
+                    app.root.current = "SettingsScreen"
+
+
+<CurrentTimeScreen>:
+    name: "CurrentTimeScreen"
+
+    canvas.before:
+        Color:
+            rgba: (0, .18, .2, 1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
+    BoxLayout:
+        orientation: "vertical"
+        spacing: "5sp"
+
+        Label:
+            text: "ВРЕМЯ"
+            font_size: "35sp"
+            bold: True
+            color: 0, 0, 0, 1
+            size_hint_y: .08
+
+            canvas.before:
+                Color:
+                    rgba: 0, .9, 1, 1
+
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+        ScrollView:
+            GridLayout:
+                cols: 1
+                padding: "10sp", 0
+                spacing: "25sp"
+                size_hint_y: None
+                height: self.minimum_height
+                row_default_height: "50sp"
+
+                BoxLayout:
+
+                    Label:
+                        text: "С регистрации:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: hours_have_passed
+                        color: 1, 1, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                Widget:
+
+                BoxLayout:
+
+                    Label:
+                        text: "Работа/учёба:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: work_time
+                        color: 0, 1, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Самообразов.:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: self_education
+                        color: 0, 1, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Хобби:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: hobby
+                        color: 0, 1, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Сон:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: sleep
+                        color: 0, 1, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Семья:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: family
+                        color: 0, 1, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Дом. животн.:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: pets
+                        color: 0, 1, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                Widget:
+
+                BoxLayout:
+
+                    Label:
+                        text: "Пожир. врем.:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: time_wasters
+                        color: 1, 1, 1, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Магазины:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: shops
+                        color: 1, 1, 1, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Уборка:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: cleaning
+                        color: 1, 1, 1, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Душ:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: shower
+                        color: 1, 1, 1, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Рут. посл. сна:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: after_sleep
+                        color: 1, 1, 1, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Рут. пер. сном:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: before_sleep
+                        color: 1, 1, 1, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Готовка:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: cooking
+                        color: 1, 1, 1, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Приём пищи:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: meal
+                        color: 1, 1, 1, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Парикмахер:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: hairdresser
+                        color: 1, 1, 1, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                BoxLayout:
+
+                    Label:
+                        text: "Сфера красоты:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: beauty_sphere
+                        color: 1, 1, 1, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                Widget:
+
+                BoxLayout:
+
+                    Label:
+                        text: "Другое:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: other
+                        color: 1, 1, 1, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                Widget:
+
+                BoxLayout:
+
+                    Label:
+                        text: "Оставш. время:"
+                        font_size: "25sp"
+                        halign: "center"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+                    Label:
+                        id: free_time
+                        color: 0, 1, 0, 1
+                        font_size: "25sp"
+                        halign: "left"
+                        valign: "center"
+                        text_size: self.width, None
+                        size: self.texture_size
+
+        BoxLayout:
+            size_hint_y: .155
+            spacing: "1sp"
+            padding: "1sp", 0
+
+            Button:
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (0, .9, 1, 1) if self.state == "normal" else (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [25]
+
+                    Rectangle:
+                        source: "data/images/time_money_icon.png"
+                        pos: self.pos[0] + self.size[0] * .15, self.pos[1] + self.size[1] * .15
+                        size: self.size[0] * .7, self.size[1] * .7
+
+                on_release:
+                    root.manager.transition.direction = "right"
+                    app.root.current = "CurrentTimeAndMoneyScreen"
+
+            Button:
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (0, .9, 1, 1) if self.state == "normal" else (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [25]
+
+                    Rectangle:
+                        source: "data/images/money_icon.png"
+                        pos: self.pos[0] + self.size[0] * .15, self.pos[1] + self.size[1] * .15
+                        size: self.size[0] * .7, self.size[1] * .7
+
+                on_release:
+                    root.manager.transition.direction = "right"
+                    app.root.current = "CurrentMoneyScreen"
+
+
+            Button:
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [25]
+
+                    Rectangle:
+                        source: "data/images/time_icon.png"
+                        pos: self.pos[0] + self.size[0] * .15, self.pos[1] + self.size[1] * .15
+                        size: self.size[0] * .7, self.size[1] * .7
+
+            Button:
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (0, .9, 1, 1) if self.state == "normal" else (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [25]
+
+                    Rectangle:
+                        source: "data/images/settings_icon.png"
+                        pos: self.pos[0] + self.size[0] * .15, self.pos[1] + self.size[1] * .15
+                        size: self.size[0] * .7, self.size[1] * .7
+
+                on_release:
+                    root.manager.transition.direction = "left"
+                    app.root.current = "SettingsScreen"
+
+
+<SettingsScreen>:
+    name: "SettingsScreen"
+
+    canvas.before:
+        Color:
+            rgba: (0, .18, .2, 1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
+    BoxLayout:
+        orientation: "vertical"
+        spacing: "5sp"
+
+        Label:
+            text: "НАСТРОЙКИ"
+            font_size: "35sp"
+            bold: True
+            color: 0, 0, 0, 1
+            size_hint_y: .08
+
+            canvas.before:
+                Color:
+                    rgba: 0, .9, 1, 1
+
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+        BoxLayout:
+            orientation: "vertical"
+            padding: "10sp", 0
+            spacing: "10sp"
+
+            Button:
+                text: "К экрану входа"
+                font_size: "30sp"
+                bold: True
+                color: 0, 0, 0, 1
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (0, .9, 1, 1) if self.state == 'normal' else (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [25]
+                on_release:
+                    root.manager.transition.direction = "down"
+                    app.root.current = "LoginScreen"
+
+            Widget:
+
+            Button:
+                text: "Общие данные"
+                font_size: "30sp"
+                color: 0, 0, 0, 1
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (0, .9, 1, 1) if self.state == 'normal' else (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [25]
+                on_release:
+                    root.manager.transition.direction = "up"
+                    app.root.current = "PersonalDataSettingsScreen"
+
+            Button:
+                text: "Данные о времени"
+                font_size: "30sp"
+                color: 0, 0, 0, 1
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (0, .9, 1, 1) if self.state == 'normal' else (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [25]
+                on_release:
+                    root.manager.transition.direction = "up"
+                    app.root.current = "TimeDataSettingsScreen"
+
+            Button:
+                text: "Данные о финансах"
+                font_size: "30sp"
+                color: 0, 0, 0, 1
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (0, .9, 1, 1) if self.state == 'normal' else (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [25]
+                on_release:
+                    root.manager.transition.direction = "up"
+                    app.root.current = "MoneyDataSettingsScreen"
+
+            Button:
+                text: "Изменить пароль"
+                font_size: "30sp"
+                color: 0, 0, 0, 1
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (0, .9, 1, 1) if self.state == 'normal' else (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [25]
+                on_release:
+                    root.manager.transition.direction = "up"
+                    app.root.current = "ChangePasswordScreen"
+
+        BoxLayout:
+            size_hint_y: .155
+            spacing: "1sp"
+            padding: "1sp", 0
+
+            Button:
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (0, .9, 1, 1) if self.state == "normal" else (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [25]
+
+                    Rectangle:
+                        source: "data/images/time_money_icon.png"
+                        pos: self.pos[0] + self.size[0] * .15, self.pos[1] + self.size[1] * .15
+                        size: self.size[0] * .7, self.size[1] * .7
+
+                on_release:
+                    root.manager.transition.direction = "right"
+                    app.root.current = "CurrentTimeAndMoneyScreen"
+
+            Button:
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (0, .9, 1, 1) if self.state == "normal" else (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [25]
+
+                    Rectangle:
+                        source: "data/images/money_icon.png"
+                        pos: self.pos[0] + self.size[0] * .15, self.pos[1] + self.size[1] * .15
+                        size: self.size[0] * .7, self.size[1] * .7
+
+                on_release:
+                    root.manager.transition.direction = "right"
+                    app.root.current = "CurrentMoneyScreen"
+
+
+            Button:
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (0, .9, 1, 1) if self.state == "normal" else (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [25]
+
+                    Rectangle:
+                        source: "data/images/time_icon.png"
+                        pos: self.pos[0] + self.size[0] * .15, self.pos[1] + self.size[1] * .15
+                        size: self.size[0] * .7, self.size[1] * .7
+
+                on_release:
+                    root.manager.transition.direction = "right"
+                    app.root.current = "CurrentTimeScreen"
+
+            Button:
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [25]
+
+                    Rectangle:
+                        source: "data/images/settings_icon.png"
+                        pos: self.pos[0] + self.size[0] * .15, self.pos[1] + self.size[1] * .15
+                        size: self.size[0] * .7, self.size[1] * .7
+
+
+<PersonalDataSettingsScreen>:
+    name: "PersonalDataSettingsScreen"
+
+    BoxLayout:
+        orientation: "vertical"
+        spacing: "5sp"
+
+        BoxLayout:
+            size_hint_y: .06
+
+            Button:
+                text: "Назад"
+                size_hint_x: self.height * 3 / self.parent.width
+                width: self.height * 2
+                color: 0, 0, 0, 1
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (0, .9, 1, 1) if self.state == "normal" else (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [15]
+                on_release:
+                    root.manager.transition.direction = "down"
+                    app.root.current = "SettingsScreen"
+
+            Label:
+                id: state
+                text: "Общие данные"
+                color: 0, .9, 1, 1
+                font_size: "30sp"
+                halign: "center"
+                text_size: self.width, None
+                size: self.texture_size
+
+        ScrollView:
+            GridLayout:
+                cols: 1
+                padding: "30sp", 0
+                size_hint_y: None
+                height: self.minimum_height
+                row_default_height: "95sp"
+
+                SettingsInfoLabel:
+                    text: "Ваше имя:"
+                SettingsDataTextInput:
+                    id: user_name
+                    hint_text: ". . . . ."
+
+                SettingsInfoLabel:
+                    text: "Дата рождения:"
+                SettingsDataTextInput:
+                    id: date_of_birth
+                    hint_text: "dd.mm.yyyy"
+
+                
+                SettingsTitleLabel: ###########################################
+                    text: "Род деятельности"
+
+                SettingsInfoLabel:
+                    text: "То, чем Вы занимаетесь:"
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Ничем"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: no_working
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.study_at_school.active = False if self.active == True else root.ids.study_at_school.active
+                            root.ids.study_at_university.active = False if self.active == True else root.ids.study_at_university.active
+                            root.ids.working.active = False if self.active == True else root.ids.working.active
+                            root.ids.personal_business.active = False if self.active == True else root.ids.personal_business.active
+                            root.ids.other_work.active = False if self.active == True else root.ids.other_work.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Учусь в школе"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: study_at_school
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_working.active = False if self.active == True else root.ids.no_working.active
+                            root.ids.study_at_university.active = False if self.active == True else root.ids.study_at_university.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Учусь в ВУЗе/колледже"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: study_at_university
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_working.active = False if self.active == True else root.ids.no_working.active
+                            root.ids.study_at_school.active = False if self.active == True else root.ids.study_at_school.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Работаю"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: working
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_working.active = False if self.active == True else root.ids.no_working.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Свой бизнес"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: personal_business
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_working.active = False if self.active == True else root.ids.no_working.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Другое"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: other_work
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_working.active = False if self.active == True else root.ids.no_working.active
+
+
+                SettingsTitleLabel: ###########################################
+                    text: "Хобби"
+
+                SettingsInfoLabel:
+                    text: "Ваше(и) хобби:"
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Хобби отсутствует"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: no_hobbies
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.sport_hobby.active = False if self.active == True else root.ids.sport_hobby.active
+                            root.ids.tourism_hobby.active = False if self.active == True else root.ids.tourism_hobby.active
+                            root.ids.dance_hobby.active = False if self.active == True else root.ids.dance_hobby.active
+                            root.ids.hunting_hobby.active = False if self.active == True else root.ids.hunting_hobby.active
+                            root.ids.art_hobby.active = False if self.active == True else root.ids.art_hobby.active
+                            root.ids.vocals_hobby.active = False if self.active == True else root.ids.vocals_hobby.active
+                            root.ids.collecting_hobby.active = False if self.active == True else root.ids.collecting_hobby.active
+                            root.ids.programming_hobby.active = False if self.active == True else root.ids.programming_hobby.active
+                            root.ids.construction_hobby.active = False if self.active == True else root.ids.construction_hobby.active
+                            root.ids.walk_hobby.active = False if self.active == True else root.ids.walk_hobby.active
+                            root.ids.shopping_hobby.active = False if self.active == True else root.ids.shopping_hobby.active
+                            root.ids.film_hobby.active = False if self.active == True else root.ids.film_hobby.active
+                            root.ids.video_games_hobby.active = False if self.active == True else root.ids.video_games_hobby.active
+                            root.ids.meditation_hobby.active = False if self.active == True else root.ids.meditation_hobby.active
+                            root.ids.other_hobby.active = False if self.active == True else root.ids.other_hobby.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Спорт"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: sport_hobby
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Туризм"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: tourism_hobby
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Танцы"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: dance_hobby
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Охота / Рыбалка"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: hunting_hobby
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Искусство"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: art_hobby
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Вокал"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: vocals_hobby
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Коллекционирование"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: collecting_hobby
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Программирование"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: programming_hobby
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Конструирование"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: construction_hobby
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Прогулки"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: walk_hobby
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Шоппинг"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: shopping_hobby
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Фильмы / Сериалы"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: film_hobby
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Видеоигры"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: video_games_hobby
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Медитация / Йога"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: meditation_hobby
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Другое"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: other_hobby
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_hobbies.active = False if self.active == True else root.ids.no_hobbies.active
+
+
+                SettingsTitleLabel: ###########################################
+                    text: "Пожиратели времени"
+
+                SettingsInfoLabel:
+                    text: "Ваши пожиратели времени:"
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Отсутствуют"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: no_time_wasters
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.TV_addiction_time_waster.active = False if self.active == True else root.ids.TV_addiction_time_waster.active
+                            root.ids.internet_addiction_time_waster.active = False if self.active == True else root.ids.internet_addiction_time_waster.active
+                            root.ids.chatter_time_waster.active = False if self.active == True else root.ids.chatter_time_waster.active
+                            root.ids.smoking_time_waster.active = False if self.active == True else root.ids.smoking_time_waster.active
+                            root.ids.other_time_waster.active = False if self.active == True else root.ids.other_time_waster.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "ТВ-зависимость"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: TV_addiction_time_waster
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_time_wasters.active = False if self.active == True else root.ids.no_time_wasters.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Интернет-зависимость"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: internet_addiction_time_waster
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_time_wasters.active = False if self.active == True else root.ids.no_time_wasters.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Болтовня и сплетни"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: chatter_time_waster
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_time_wasters.active = False if self.active == True else root.ids.no_time_wasters.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Курение / вейпинг / кальян"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: smoking_time_waster
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_time_wasters.active = False if self.active == True else root.ids.no_time_wasters.active
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "Другое"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "left"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: other_time_waster
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+                        on_active:
+                            root.ids.no_time_wasters.active = False if self.active == True else root.ids.no_time_wasters.active
+
+                Button:
+                    size_hint_y:.25
+                    text: "ИЗМЕНИТЬ"
+                    font_size: "20sp"
+                    bold: True
+                    color: 0, 0, 0, 1
+                    background_color: 0, 0, 0, 0
+                    canvas.before:
+                        Color:
+                            rgba: (0, .9, 1, 1) if self.state == "normal" else (.3, 1, 1, 1)
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [25]
+                    on_release:
+                        if root.write_data(): state.color = (0, 1, 0, 1); state.text = "Успех"
+                        else: state.color = (1, 0, 0, 1); state.text = "Ошибка"
+
+
+
+<TimeDataSettingsScreen>:
+    name: "TimeDataSettingsScreen"
+
+    BoxLayout:
+        orientation: "vertical"
+        spacing: "5sp"
+
+        BoxLayout:
+            size_hint_y: .06
+
+            Button:
+                text: "Назад"
+                size_hint_x: self.height * 3 / self.parent.width
+                width: self.height * 2
+                color: 0, 0, 0, 1
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (0, .9, 1, 1) if self.state == "normal" else (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [15]
+                on_release:
+                    root.manager.transition.direction = "down"
+                    app.root.current = "SettingsScreen"
+
+            Label:
+                id: state
+                text: "Данные о времени"
+                color: 0, .9, 1, 1
+                font_size: "30sp"
+                halign: "center"
+                text_size: self.width, None
+                size: self.texture_size
+
+        ScrollView:
+            GridLayout:
+                cols: 1
+                padding: "30sp", 0
+                size_hint_y: None
+                height: self.minimum_height
+                row_default_height: "95sp"
+                
+                SettingsTitleLabel: ###########################################
+                    text: "Род деятельности"
+
+                SettingsInfoLabel:
+                    text: "Сколько дней в неделю Вы тратите на свой род деятельности(работу)?"
+                SettingsDataTextInput:
+                    id: days_a_week_at_work
+                    input_filter: "int"
+                    hint_text: "X"
+
+                SettingsInfoLabel:
+                    text: "Сколько в среднем часов в день эта деятельность занимает?"
+                SettingsDataTextInput:
+                    id: hours_a_day_work
+                    input_filter: "float"
+                    hint_text: "X"
+
+                SettingsInfoLabel:
+                    text: "Сколько в среднем минут в день занимает путь на эту деятельность?"
+                SettingsDataTextInput:
+                    id: minutes_travel_time_to_work
+                    input_filter: "float"
+                    hint_text: "XX"
+
+                SettingsInfoLabel:
+                    text: "Сколько в среднем минут в день занимает путь с этой деятельности?"
+                SettingsDataTextInput:
+                    id: minutes_travel_time_from_work
+                    input_filter: "float"
+                    hint_text: "XX"
+
+                SettingsInfoLabel:
+                    text: "сколько минут в день Вы тратите на самообразование?"
+                SettingsDataTextInput:
+                    id: minutes_for_self_education_per_day
+                    input_filter: "float"
+                    hint_text: "XX"
+
+
+                SettingsTitleLabel: ###########################################
+                    text: "Хобби и сон"
+
+                SettingsInfoLabel:
+                    text: "Сколько часов в неделю занимает(ют) Ваше(и) хобби?"
+                SettingsDataTextInput:
+                    id: hours_a_week_for_hobbies
+                    input_filter: "float"
+                    hint_text: "X"
+
+                SettingsInfoLabel:
+                    text: "Сколько часов в день Вы обычно спите?"
+                SettingsDataTextInput:
+                    id: hours_of_sleep
+                    input_filter: "float"
+                    hint_text: "X"
+
+
+                SettingsTitleLabel: ###########################################
+                    text: "Пожиратели времени"
+
+                SettingsInfoLabel:
+                    text: "Сколько часов в будний день уходит на Ваших пожирателей времени?"
+                SettingsDataTextInput:
+                    id: hours_on_a_weekday_for_time_wasters
+                    input_filter: "float"
+                    hint_text: "X"
+
+                SettingsInfoLabel:
+                    text: "Сколько часов в выходной день уходит на Ваших пожирателей времени?"
+                SettingsDataTextInput:
+                    id: hours_on_a_day_off_for_time_wasters
+                    input_filter: "float"
+                    hint_text: "X"
+
+
+                SettingsTitleLabel: ###########################################
+                    text: "Быт и семья"
+
+                SettingsInfoLabel:
+                    text: "Сколько раз в неделю Вы посещаете продуктовые и бытовые магазины?"
+                SettingsDataTextInput:
+                    id: visit_store_once_a_week
+                    input_filter: "int"
+                    hint_text: "X"
+
+                SettingsInfoLabel:
+                    text: "Сколько в среднем минут Вам требуется на путь в магазин?"
+                SettingsDataTextInput:
+                    id: minutes_on_the_way_to_the_store
+                    input_filter: "float"
+                    hint_text: "X"
+
+                SettingsInfoLabel:
+                    text: "Сколько минут в среднем Вы проводите в магазине?"
+                SettingsDataTextInput:
+                    id: minutes_to_visit_shop
+                    input_filter: "float"
+                    hint_text: "X"
+
+                SettingsInfoLabel:
+                    text: "Сколько часов в неделю Вы тратите на семью / отношения?"
+                SettingsDataTextInput:
+                    id: hours_per_week_per_family
+                    input_filter: "float"
+                    hint_text: "X"
+
+                SettingsInfoLabel:
+                    text: "Сколько часов в неделю Вы тратите на домашних животных?"
+                SettingsDataTextInput:
+                    id: hours_per_week_for_pets
+                    input_filter: "float"
+                    hint_text: "X"
+
+                SettingsInfoLabel:
+                    text: "Сколько часов в неделю Вы тратите на уборку?"
+                SettingsDataTextInput:
+                    id: hours_per_week_for_cleaning
+                    input_filter: "float"
+                    hint_text: "X"
+
+                SettingsInfoLabel:
+                    text: "Среднее количесво минут на принятие душа/ванны в день:"
+                SettingsDataTextInput:
+                    id: minutes_per_day_per_shower
+                    input_filter: "float"
+                    hint_text: "X"
+
+                SettingsInfoLabel:
+                    text: "Среднее количесво минут на рутины после пробуждения(заправить постель, умыться и т.д.):"
+                SettingsDataTextInput:
+                    id: minutes_after_sleep
+                    input_filter: "float"
+                    hint_text: "X"
+
+                SettingsInfoLabel:
+                    text: "Среднее количесво минут на рутины перед сном:"
+                SettingsDataTextInput:
+                    id: minutes_before_sleep
+                    input_filter: "float"
+                    hint_text: "X"
+
+
+                SettingsTitleLabel: ###########################################
+                    text: "Готовка и приём пищи"
+
+                SettingsInfoLabel:
+                    text: "Сколько часов в неделю Вы обычно тратите на готовку?"
+                SettingsDataTextInput:
+                    id: hours_a_day_for_cooking
+                    input_filter: "float"
+                    hint_text: "X"
+
+                SettingsInfoLabel:
+                    text: "Сколько минут обычно занимает Ваш завтрак?"
+                SettingsDataTextInput:
+                    id: minutes_for_breakfast
+                    input_filter: "float"
+                    hint_text: "X"
+
+                SettingsInfoLabel:
+                    text: "Сколько минут обычно занимает Ваш обед?"
+                SettingsDataTextInput:
+                    id: minutes_for_lunch
+                    input_filter: "float"
+                    hint_text: "X"
+
+                SettingsInfoLabel:
+                    text: "Сколько минут обычно занимает Ваш ужин?"
+                SettingsDataTextInput:
+                    id: minutes_for_dinner
+                    input_filter: "float"
+                    hint_text: "X"
+
+                SettingsTitleLabel: ###########################################
+                    text: "Уход за собой"
+
+                SettingsInfoLabel:
+                    text: "Количесво часов на посещение парикмахера/барбера/стилиста в месяц:"
+                SettingsDataTextInput:
+                    id: hours_per_month_per_hairdresser
+                    input_filter: "float"
+                    hint_text: "X"
+
+                SettingsInfoLabel:
+                    text: "Среднее количесво часов на посещение иных работников сферы красоты и ухода в месяц:"
+                SettingsDataTextInput:
+                    id: hours_per_month_for_beauty_workers
+                    input_filter: "float"
+                    hint_text: "X"
+
+
+                SettingsTitleLabel: ###########################################
+                    text: "Другое"
+
+                SettingsInfoLabel:
+                    text: "Количество затрачиваемых часов на иные виды деятельности в неделю:"
+                SettingsDataTextInput:
+                    id: hours_per_week_for_other_activities
+                    input_filter: "float"
+                    hint_text: "X"
+
+                Button:
+                    size_hint_y:.25
+                    text: "ИЗМЕНИТЬ"
+                    font_size: "20sp"
+                    bold: True
+                    color: 0, 0, 0, 1
+                    background_color: 0, 0, 0, 0
+                    canvas.before:
+                        Color:
+                            rgba: (0, .9, 1, 1) if self.state == "normal" else (.3, 1, 1, 1)
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [25]
+                    on_release:
+                        if root.write_data(): state.color = (0, 1, 0, 1); state.text = "Успех"
+                        else: state.color = (1, 0, 0, 1); state.text = "Ошибка"
+
+
+
+<MoneyDataSettingsScreen>:
+    name: "MoneyDataSettingsScreen"
+
+    BoxLayout:
+        orientation: "vertical"
+        spacing: "5sp"
+
+        BoxLayout:
+            size_hint_y: .06
+
+            Button:
+                text: "Назад"
+                size_hint_x: self.height * 3 / self.parent.width
+                width: self.height * 2
+                color: 0, 0, 0, 1
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (0, .9, 1, 1) if self.state == "normal" else (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [15]
+                on_release:
+                    root.manager.transition.direction = "down"
+                    app.root.current = "SettingsScreen"
+
+            Label:
+                id: state
+                text: "Данные о финансах"
+                color: 0, .9, 1, 1
+                font_size: "30sp"
+                halign: "center"
+                text_size: self.width, None
+                size: self.texture_size
+
+        ScrollView:
+            GridLayout:
+                cols: 1
+                padding: "30sp", 0
+                size_hint_y: None
+                height: self.minimum_height
+                row_default_height: "95sp"
+
+                SettingsTitleLabel: ###########################################
+                    text: "Валюта"
+
+                SettingsInfoLabel:
+                    text: "Укажите предпочитаемую валюту:"
+
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        text: "₽"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "right"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: currency_ruble
+                        group: "currency" 
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+
+                    Label:
+                        font_name: "data/fonts/Lato.ttf"
+                        text: "₴"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "right"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: currency_hryvnia
+                        group: "currency" 
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+
+                    Label:
+                        font_name: "data/fonts/Lato.ttf"
+                        text: "₸"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "right"
+                        valign: "center"
+                    
+                    CheckBox:
+                        id: currency_tenge
+                        group: "currency" 
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+
+                    Label:
+                        font_name: "data/fonts/Lato.ttf"
+                        text: "₮"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "right"
+                        valign: "center"
+
+                    CheckBox:
+                        id: currency_tugrik
+                        group: "currency" 
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+
+                BoxLayout:
+                    orientation: "horizontal"
+                    height: "50sp"
+
+                    Label:
+                        font_name: "data/fonts/Lato.ttf"
+                        text: "Ұ"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "right"
+                        valign: "center"
+
+                    CheckBox:
+                        id: currency_yuan
+                        group: "currency" 
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+
+                    Label:
+                        font_name: "data/fonts/Lato.ttf"
+                        text: "$"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "right"
+                        valign: "center"
+
+                    CheckBox:
+                        id: currency_dollar
+                        group: "currency" 
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+
+                    Label:
+                        font_name: "data/fonts/Lato.ttf"
+                        text: "€"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "right"
+                        valign: "center"
+
+                    CheckBox:
+                        id: currency_euro
+                        group: "currency" 
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+
+                    Label:
+                        font_name: "data/fonts/Lato.ttf"
+                        text: "£"
+                        font_size: "25sp"
+                        text_size: self.width, None
+                        size: self.texture_size
+                        halign: "right"
+                        valign: "center"
+
+                    CheckBox:
+                        id: currency_pound_sterling
+                        group: "currency" 
+                        size_hint_y: None
+                        color: 0, .9, 1, 1
+
+
+                SettingsTitleLabel: ###########################################
+                    text: "Доходы"
+
+                SettingsInfoLabel:
+                    id: scholarship_per_month_Label
+                    text: "Стипендия или иные выплаты с учебного заведения в месяц:"
+                SettingsDataTextInput:
+                    id: scholarship_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Ваша зарплата в месяц:"
+                SettingsDataTextInput:
+                    id: salary_per_month
+                    input_filter: "float"
+                    hint_text: "XXXXX"
+
+                SettingsInfoLabel:
+                    text: "Примерное количество премий в год:"
+                SettingsDataTextInput:
+                    id: premiums_per_year
+                    input_filter: "float"
+                    hint_text: "XX"
+
+                SettingsInfoLabel:
+                    text: "Средний размер премии:"
+                SettingsDataTextInput:
+                    id: premium_amount
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Количество Ваших бизнесов:"
+                SettingsDataTextInput:
+                    id: number_of_businesses
+                    input_filter: "int"
+                    hint_text: "X"
+
+                SettingsInfoLabel:
+                    text: "Средняя чистая прибыль с Вашего(их) бизнеса(ов) в месяц:"
+                SettingsDataTextInput:
+                    id: net_income_from_business_per_month
+                    input_filter: "float"
+                    hint_text: "XXXXX"
+
+                SettingsInfoLabel:
+                    text: "Сумма иных финансовых поступлений в месяц:"
+                SettingsDataTextInput:
+                    id: other_financial_receipts_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+
+                SettingsTitleLabel: ###########################################
+                    text: "Расходы"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на спорт и снаряжение средства в месяц:"
+                SettingsDataTextInput:
+                    id: sports_funds_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на туризм и снаряжение средства в месяц:"
+                SettingsDataTextInput:
+                    id: tourism_funds_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на танцы и снаряжение средства в месяц:"
+                SettingsDataTextInput:
+                    id: dance_funds_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на охоту/рыбалку и снаряжение средства в месяц:"
+                SettingsDataTextInput:
+                    id: hunting_funds_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на искусство, инструменты и материал средства в месяц:"
+                SettingsDataTextInput:
+                    id: art_funds_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на вокал средства в месяц:"
+                SettingsDataTextInput:
+                    id: vocals_funds_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на коллецкционирование средства в месяц:"
+                SettingsDataTextInput:
+                    id: collecting_funds_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на программирование средства в месяц:"
+                SettingsDataTextInput:
+                    id: programming_funds_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на конструирование средства в месяц:"
+                SettingsDataTextInput:
+                    id: construction_funds_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на прогулки средства в месяц(включая снаряжение и одежду):"
+                SettingsDataTextInput:
+                    id: walk_funds_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на шоппинг средства в месяц:"
+                SettingsDataTextInput:
+                    id: shopping_funds_per_month
+                    input_filter: "float"
+                    hint_text: "XXXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на фильмы/сериалы(подписки и/или другое) средства в месяц:"
+                SettingsDataTextInput:
+                    id: film_funds_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на видеоигры средства в месяц:"
+                SettingsDataTextInput:
+                    id: video_games_funds_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на медитацию/йогу средства в месяц:"
+                SettingsDataTextInput:
+                    id: meditation_funds_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на иные виды хобби средства в месяц:"
+                SettingsDataTextInput:
+                    id: funds_for_other_types_of_hobbies_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на самообразование средства в месяц:"
+                SettingsDataTextInput:
+                    id: self_education_funds_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на ТВ средства в месяц:"
+                SettingsDataTextInput:
+                    id: TV_funds_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на интернет-ресурсы средства в месяц:"
+                SettingsDataTextInput:
+                    id: internet_resources_funds_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на курение/вейпинг средства в месяц:"
+                SettingsDataTextInput:
+                    id: smoking_funds_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на иные пожиратели времени средства в месяц:"
+                SettingsDataTextInput:
+                    id: funds_for_other_types_of_time_wasters_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на покупки в продуктовом мазагине средства в неделю:"
+                SettingsDataTextInput:
+                    id: grocery_shopping_allowance_per_week
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на покупки в бытовом мазагине средства в неделю:"
+                SettingsDataTextInput:
+                    id: funds_for_shopping_at_a_household_store_per_week
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на парикмахера / барбера / стилиста средства в месяц:"
+                SettingsDataTextInput:
+                    id: funds_for_a_hairdresser_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на иных работников сферы красоты и ухода средства в месяц:"
+                SettingsDataTextInput:
+                    id: funds_for_other_beauty_workers_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на интернет средства в месяц:"
+                SettingsDataTextInput:
+                    id: internet_funds_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                SettingsInfoLabel:
+                    text: "Затрачиваемые на иные расходы средства в месяц:"
+                SettingsDataTextInput:
+                    id: other_funds_per_month
+                    input_filter: "float"
+                    hint_text: "XXXX"
+
+                Button:
+                    size_hint_y:.25
+                    text: "ИЗМЕНИТЬ"
+                    font_size: "20sp"
+                    bold: True
+                    color: 0, 0, 0, 1
+                    background_color: 0, 0, 0, 0
+                    canvas.before:
+                        Color:
+                            rgba: (0, .9, 1, 1) if self.state == "normal" else (.3, 1, 1, 1)
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [25]
+                    on_release:
+                        if root.write_data(): state.color = (0, 1, 0, 1); state.text = "Успех"
+                        else: state.color = (1, 0, 0, 1); state.text = "Ошибка"
+
+
+<ChangePasswordScreen>:
+    name: "ChangePasswordScreen"
+
+    BoxLayout:
+        orientation: "vertical"
+        spacing: "5sp"
+
+        BoxLayout:
+            size_hint_y: .06
+
+            Button:
+                text: "Назад"
+                size_hint_x: self.height * 3 / self.parent.width
+                width: self.height * 2
+                color: 0, 0, 0, 1
+                background_color: 0, 0, 0, 0
+                canvas.before:
+                    Color:
+                        rgba: (0, .9, 1, 1) if self.state == "normal" else (.3, 1, 1, 1)
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [15]
+                on_release:
+                    root.manager.transition.direction = "down"
+                    app.root.current = "SettingsScreen"
+
+            Label:
+                id: state
+                text: "Изменение пароля"
+                color: 0, .9, 1, 1
+                font_size: "30sp"
+                halign: "center"
+                text_size: self.width, None
+                size: self.texture_size
+
+        BoxLayout:
+            orientation: "vertical"
+            padding: "80sp", 0
+
+            Widget:
+
+            BoxLayout:
+                orientation: "vertical"
+                spacing: "10sp"
+                size_hint_y: .85
+
+                TextInput:
+                    id: old_password
+                    size_hint_y:.2
+                    hint_text: "Старый пароль"
+                    font_size: "25sp"
+                    foreground_color: 1, 1, 1, 1
+                    background_color: 0, 0, 0, 0
+                    cursor_color: 1, 1, 1, 1
+                    multiline: False
+                    password: True
+                    allow_copy: False
+
+                TextInput:
+                    id: new_password
+                    size_hint_y:.2
+                    hint_text: "Новый пароль"
+                    font_size: "25sp"
+                    foreground_color: 1, 1, 1, 1
+                    background_color: 0, 0, 0, 0
+                    cursor_color: 1, 1, 1, 1
+                    multiline: False
+                    password: True
+                    allow_copy: False
+
+                TextInput:
+                    id: confirm_new_password
+                    size_hint_y:.2
+                    hint_text: "Подтвердите пароль"
+                    font_size: "25sp"
+                    foreground_color: 1, 1, 1, 1
+                    background_color: 0, 0, 0, 0
+                    cursor_color: 1, 1, 1, 1
+                    multiline: False
+                    password: True
+                    allow_copy: False
+
+                Button:
+                    size_hint_y:.25
+                    text: "ИЗМЕНИТЬ"
+                    font_size: "20sp"
+                    bold: True
+                    color: 0, 0, 0, 1
+                    background_color: 0, 0, 0, 0
+                    canvas.before:
+                        Color:
+                            rgba: (0, .9, 1, 1) if self.state == "normal" else (.3, 1, 1, 1)
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [25]
+                    on_release:
+                        if root.write_data(): state.color = (0, 1, 0, 1); state.text = "Успех"; root.clear_text_inputs()
+                        else: state.color = (1, 0, 0, 1); state.text = "Ошибка"
+
+            Widget:
